@@ -1,9 +1,9 @@
 import Express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import authRouter from './routes/auth.routes';
 import { isCelebrateError } from 'celebrate';
 import { makeResponse } from './utils/response';
+import productsRouter from './routes/product.routes';
 import connectDB from './database';
 
 const app = Express();
@@ -15,7 +15,7 @@ app.use(Express.json({ limit: '1mb' }));
 app.use(Express.urlencoded({ extended: true }));
 
 //ROUTES
-app.use('/api/auth/', authRouter);
+app.use('/api/product', productsRouter);
 
 app.use((err, req, res, next) => {
     if (isCelebrateError(err)) {
@@ -32,8 +32,8 @@ app.use((err, req, res, next) => {
 
 const start = async () => {
     await connectDB();
-    app.listen(3000, () => {
-        console.log('Auth service listening on port 3000');
+    app.listen(3001, () => {
+        console.log('Auth service listening on port 3001');
     });
 }
 
