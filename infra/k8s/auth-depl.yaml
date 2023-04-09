@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+      - name: auth
+        image: fazidsamoon/ds-auth
+        env:
+          - name: MONGO_URI
+            valueFrom:
+              secretKeyRef:
+                name: mongo-uri
+                key: MONGO_URI
+          - name: BCRYPT_SALT
+            valueFrom:
+              secretKeyRef:
+                name: bcrypt-salt
+                key: BCRYPT_SALT
+          - name: JWT_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret-key
+                key: JWT_SECRET_KEY
+          - name: JWT_EXPIRATION_TIME
+            valueFrom:
+              secretKeyRef:
+                name: jwt-expiration-time
+                key: JWT_EXPIRATION_TIME
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
