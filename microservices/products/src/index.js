@@ -33,7 +33,7 @@ app.use((err, req, res, next) => {
 const start = async () => {
     await connectDB();
     app.listen(3001, () => {
-        console.log('Auth service listening on port 3001');
+        console.log('product service listening on port 3001');
     });
 }
 

@@ -1,21 +1,12 @@
 import Express from 'express';
+import { createProduct, deleteProduct, getAllProducts, updateProduct } from '../controllers/product';
+import { verifyAccessToken, verifySeller } from '../middlewares/authentication';
 
 const productsRouter = Express.Router();
 
-productsRouter.get('/', (req, res) => {
-    res.send('Hello from products');
-});
-
-productsRouter.post('/', (req, res) => {
-    res.send('Hello from products');
-});
-
-productsRouter.patch('/:id', (req, res) => {
-    res.send('Hello from products');
-});
-
-productsRouter.delete('/:id', (req, res) => {
-    res.send('Hello from products');
-});
+productsRouter.get('/', getAllProducts);
+productsRouter.post('/', verifyAccessToken, verifySeller, createProduct);
+productsRouter.patch('/:id', verifyAccessToken, verifySeller, updateProduct);
+productsRouter.delete('/:id', verifyAccessToken, verifySeller, deleteProduct);
 
 export default productsRouter;

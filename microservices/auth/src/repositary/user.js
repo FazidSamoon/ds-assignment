@@ -1,4 +1,5 @@
-import User from '../models/userModel.js';
+// import User from '../models/userModel.js';
+import { User } from 'ds-assignment-database-schema-package';
 
 export const createUser = async (user) => {
     try {
@@ -12,9 +13,6 @@ export const createUser = async (user) => {
 export const getUser = async (filters) => {
     try {
         const user = await User.findOne(filters);
-        if (user.isStaff) {
-            return user.populate('staff');
-        }
         return user;
     } catch (error) {
         console.log(error);

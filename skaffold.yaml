@@ -15,3 +15,11 @@ build:
         manual:
           - dest: .
             src: "src/**/*.js"
+    - image: fazidsamoon/ds-product
+      context: microservices/products
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"
