@@ -6,5 +6,10 @@ export const generateAccessToken = async (data) => {
 };
 
 export const decodeToken = async (token) => {
-    return Jwt.verify(token, process.env.JWT_SECRET_KEY);
+    try {
+        return Jwt.verify(token, process.env.JWT_SECRET_KEY);
+    } catch (error) {
+        throw new Error(error);
+    }
+    
 };
