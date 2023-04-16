@@ -39,3 +39,19 @@ build:
         manual:
           - dest: .
             src: "src/**/*.js"
+    - image: fazidsamoon/ds-rating
+      context: microservices/ratings
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"
+    - image: fazidsamoon/ds-delivery
+      context: microservices/delivery
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"

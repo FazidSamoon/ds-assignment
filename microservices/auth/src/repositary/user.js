@@ -18,3 +18,33 @@ export const getUser = async (filters) => {
         console.log(error);
     }
 };
+
+export const verifyUserRepo = async (id) => {
+    try {
+        const user = await User.findByIdAndUpdate(
+            id,
+            {
+                $set: { is_verified: true },
+            },
+            { new: true }
+        );
+        return user;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const updateUserRepo = async (id, user) => {
+    try {
+        const userObj = await User.findByIdAndUpdate(
+            id,
+            {
+                $set: user,
+            },
+            { new: true }
+        );
+        return userObj;
+    } catch (error) {
+        console.log(error);
+    }
+}
