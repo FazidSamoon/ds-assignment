@@ -23,3 +23,19 @@ build:
         manual:
           - dest: .
             src: "src/**/*.js"
+    - image: fazidsamoon/ds-order
+      context: microservices/order
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"
+    - image: fazidsamoon/ds-email
+      context: microservices/email
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "src/**/*.js"

@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: product-depl
+  name: order-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: product
+      app: order
   template:
     metadata:
       labels:
-        app: product
+        app: order
     spec:
       containers:
-      - name: product
-        image: fazidsamoon/ds-product
+      - name: order
+        image: fazidsamoon/ds-order
         env:
           - name: MONGO_URI
             valueFrom:
@@ -34,12 +34,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: product-srv
+  name: order-srv
 spec:
   selector:
-    app: product
+    app: order
   ports:
-    - name: product
+    - name: order
       protocol: TCP
-      port: 3001
-      targetPort: 3001
+      port: 3002
+      targetPort: 3002

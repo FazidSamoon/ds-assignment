@@ -3,7 +3,7 @@ import { authLogin, authRegister } from '../services/authServices';
 import { generateAccessToken } from '../utils/jwt';
 import { makeResponse } from '../utils/response';
 
-export const loginUser = asyncHandler(async (req, res) => {
+export const loginUser = async (req, res) => {
     const user = await authLogin(req.body);
     if (!user) return makeResponse({ res, status: 500, message: 'Login failed...' });
     if (user.status) return makeResponse({ res, ...user });
@@ -15,9 +15,9 @@ export const loginUser = asyncHandler(async (req, res) => {
         data: { otherDetails, token: accessToken },
         message: 'User login successfull...'
     });
-});
+};
 
-export const registerUser = asyncHandler(async (req, res) => {
+export const registerUser = async (req, res) => {
     if (req.user) return makeResponse({ res, status: 400, message: "You've already registered for an account." });
     const user = await authRegister(req.body);
     if (!user) return makeResponse({ res, status: 500, message: 'Registration failed...' });
@@ -31,4 +31,4 @@ export const registerUser = asyncHandler(async (req, res) => {
         data: { otherDetails, token: accessToken },
         messsage: 'User creation successfull...'
     });
-});
+};
