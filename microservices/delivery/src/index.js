@@ -1,10 +1,10 @@
 import Express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import authRouter from './routes/auth.routes';
 import { isCelebrateError } from 'celebrate';
-import { makeResponse } from './utils/response';
 import connectDB from './database';
+import { makeResponse } from './utils/response';
+import deliveryRouter from './routes/delivery.routes';
 
 const app = Express();
 dotenv.config();
@@ -15,7 +15,7 @@ app.use(Express.json({ limit: '1mb' }));
 app.use(Express.urlencoded({ extended: true }));
 
 //ROUTES
-app.use('/api/auth/', authRouter);
+app.use('/api/delivery/', deliveryRouter);
 
 app.use((err, req, res, next) => {
     console.log(err)
@@ -33,8 +33,8 @@ app.use((err, req, res, next) => {
 
 const start = async () => {
     await connectDB();
-    app.listen(3000, () => {
-        console.log('Auth service listening on port 3000');
+    app.listen(3002, () => {
+        console.log('Delivery service listening on port 3003');
     });
 }
 

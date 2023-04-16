@@ -30,7 +30,7 @@ export const createProductService = async (body, seller) => {
         const response = await Product.create({ ...body, seller });
         return response;
     } catch (error) {
-        console.log(error);
+        return { status: 400, message: error.message };
     }
 };
 
@@ -39,13 +39,13 @@ export const updateProductService = async (id, body) => {
         const response = await Product.findByIdAndUpdate(
             id,
             {
-              $set: body,
+                $set: body
             },
             { new: true }
-          );
+        );
         return response;
     } catch (error) {
-        console.log(error);
+        return { status: 400, message: error.message };
     }
 };
 
@@ -54,6 +54,15 @@ export const deleteProductService = async (id) => {
         const response = await Product.findByIdAndDelete(id);
         return response;
     } catch (error) {
-        
+        return { status: 400, message: error.message };
+    }
+};
+
+export const getProductByIdService = async (id) => {
+    try {
+        const response = await Product.findById(id).populate('seller');
+        return response;
+    } catch (error) {
+        return { status: 400, message: error.message };
     }
 };
