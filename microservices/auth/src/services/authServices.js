@@ -1,4 +1,4 @@
-import { createUser, getUser } from '../repositary/user';
+import { createUser, getUser, updateUserRepo, verifyUserRepo } from '../repositary/user';
 import bcrypt from 'bcrypt';
 
 export const authLogin = async (data) => {
@@ -23,6 +23,29 @@ export const authRegister = async (data) => {
         const userObject = { ...data, password: hashedPassword };
         const result = await createUser(userObject);
         return result;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const verifyUserService = async (id) => {
+    try {
+        const user = await getUser({ _id: id });
+        if (!user) return { status: 400, message: 'User not found' };
+        if (user.isVerified) return { status: 400, message: 'User already verified' };
+        const response = await verifyUserRepo(id);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const updateUserService = async (id, body) => {
+    try {
+        const user = await getUser({ _id: id });
+        if (!user) return { status: 400, message: 'User not found' };
+        const response = await updateUserRepo(id, body);
+        return response;
     } catch (error) {
         console.log(error);
     }

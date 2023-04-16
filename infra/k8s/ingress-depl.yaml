@@ -35,9 +35,16 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: email-srv
+                name: delivery-srv
                 port:
                   number: 3003
+          - path: /api/ratings/?(/?)
+            pathType: Prefix
+            backend:
+              service:
+                name: rating-srv
+                port:
+                  number: 3004
           - path: /api/email/?(/?)
             pathType: Prefix
             backend:
