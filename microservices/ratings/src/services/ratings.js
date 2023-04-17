@@ -2,7 +2,7 @@ import { Rating } from 'ds-assignment-database-schema-package';
 
 export const getAllRaingsService = async (queries) => {
     try {
-        const { seller, product, ratingType, page, limit } = queries;
+        const { seller, product, ratingType, page, limit, sort } = queries;
         
         let queryObject = {};
         if (seller) {
@@ -33,9 +33,9 @@ export const getAllRaingsService = async (queries) => {
     }
 };
 
-export const createRatingService = async (body) => {
+export const createRatingService = async (body, user) => {
     try {
-        const response = await Rating.create(body);
+        const response = await Rating.create({...body, user});
         return response;
     } catch (error) {
         console.log("error ",error)

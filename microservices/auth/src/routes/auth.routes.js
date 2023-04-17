@@ -1,5 +1,5 @@
 import Express from 'express';
-import { loginUser, registerUser, updateUser } from '../controllers/auth';
+import { loginUser, registerUser, updateUser, verifyUser } from '../controllers/auth';
 import { celebrate, Segments } from 'celebrate';
 import { loginSchema, registerUserSchema } from '../validations/user';
 

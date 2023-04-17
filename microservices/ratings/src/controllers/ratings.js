@@ -9,7 +9,8 @@ export const getAllRatings = async (req, res) => {
 };
 
 export const createRating = async (req, res) => {
-    const response = await createRatingService(req.body);
+    const user = req.user._id;
+    const response = await createRatingService(req.body, user);
     if (!response) {
         return makeResponse({ res, status: 400, message: 'Ratings not created' });
     }
