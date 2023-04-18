@@ -1,12 +1,13 @@
 import Head from 'next/head';
+import Footer from './Footer';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Footer from './Footer';
-import Axios from 'axios';
-import Cookies from 'js-cookie';
+import jwtDecode from 'jwt-decode';
+import { CartSolid, ProfileSolid, SearchOutline } from '@/utils/iconData';
+import { Menu } from '@headlessui/react';
 
 export default function Layout({ title, children }) {
     const inactiveLink = 'mx-1';
@@ -16,22 +17,36 @@ export default function Layout({ title, children }) {
     const { pathname } = router;
 
     const [page, setPage] = useState(true);
+    const [isLogin, setIsLogin] = useState(false);
+
+    useEffect(() => {
+        const accessToken = JSON.parse(localStorage.getItem('access_token'));
+        if (accessToken != null) {
+            const decodedToken = jwtDecode(accessToken);
+            if (decodedToken.exp * 1000 < new Date().getTime()) localStorage.removeItem('access_token');
+            else setIsLogin(true);
+        }
+    }, []);
+
     const checkPage = () => {
-        if (pathname.includes('/login') || pathname.includes('/register') || pathname.includes('/product')) {
+        if (pathname.includes('/login') || pathname.includes('/register') || pathname.includes('/profile') || pathname.includes('/dashboard')) {
             setPage(false);
         }
     };
 
-    const cardHandle = () => {
-        const access_token = Cookies.get('access_token');
+    const onIconClick = (res) => {
+        if (isLogin) {
+            if (res == 'c') router.push('/cart');
+        } else {
+            if (res == 'c' || res == 'p') router.push('/login');
+        }
     };
 
-    const fetchResult = (response) => {
-        console.log(response);
-    };
+    const LogoutHandle = () => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user_data');
 
-    const fetchError = (error) => {
-        console.log(error);
+        router.push('/login');
     };
 
     return (
@@ -42,11 +57,13 @@ export default function Layout({ title, children }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
+
             <ToastContainer position="bottom-center" limit={1} className="text-center" />
+
             <div className="flex min-h-screen flex-col justify-between">
                 {/* HEADER */}
                 {page && (
-                    <header className="bg-zinc-100 pt-4 pb-4">
+                    <header className="bg-zinc-100 py-4">
                         <nav className="flex h-12 items-center px-4 justify-between">
                             <Link href="/">
                                 <p className="text-lg font-bold">VP STORES</p>
@@ -70,32 +87,50 @@ export default function Layout({ title, children }) {
 
                                 <div className="flex bg-white items-center rounded m-2 ml-3 p-1">
                                     <input type="text" placeholder="Search product" className="border-none outline-none focus:ring-0 pl-4" />
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 mr-2">
-                                        <path fillRule="evenodd" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM2.25 10.5a8.25 8.25 0 1114.59 5.28l4.69 4.69a.75.75 0 11-1.06 1.06l-4.69-4.69A8.25 8.25 0 012.25 10.5z" clipRule="evenodd" />
-                                    </svg>
+                                    <SearchOutline />
                                 </div>
                             </div>
 
                             <div className="flex items-center gap-2">
-                                <div onClick={cardHandle}>
+                                <div className="cursor-pointer" onClick={() => onIconClick('c')}>
                                     <p className="p-2 flex border-2 border-zinc-900 rounded">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                            <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
-                                        </svg>
+                                        <CartSolid />
                                     </p>
                                 </div>
 
-                                <Link href="/login">
-                                    <p className="p-2 flex border-2 border-zinc-900 rounded">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
-                                                clipRule="evenodd"
-                                            />
-                                        </svg>
-                                    </p>
-                                </Link>
+                                {!isLogin && (
+                                    <div className="cursor-pointer" onClick={() => onIconClick('p')}>
+                                        <p className="p-2 flex border-2 border-zinc-900 rounded">
+                                            <ProfileSolid />
+                                        </p>
+                                    </div>
+                                )}
+
+                                {isLogin && (
+                                    <div className="cursor-pointer" onClick={() => onIconClick('p')}>
+                                        <p className="px-2 py-1.5 flex border-2 border-zinc-900 rounded">
+                                            <Menu as="div" className="relative z-10">
+                                                <div>
+                                                    <Menu.Button>
+                                                        <ProfileSolid />
+                                                    </Menu.Button>
+                                                </div>
+                                                <Menu.Items className="absolute flex flex-col -right-3 top-10 gap-y-2 bg-zinc-100 border-2 border-zinc-800 text-zinc-800 rounded-lg">
+                                                    <Menu.Item className="px-8 py-2 border-b-2 border-zinc-800">
+                                                        <Link href={'/profile'}>
+                                                            <h1 className="font-medium">PROFILE</h1>
+                                                        </Link>
+                                                    </Menu.Item>
+                                                    <Menu.Item className="px-6 pb-2">
+                                                        <a className="font-medium text-center" onClick={LogoutHandle}>
+                                                            LOGOUT
+                                                        </a>
+                                                    </Menu.Item>
+                                                </Menu.Items>
+                                            </Menu>
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </nav>
                         {checkPage()}
@@ -107,7 +142,7 @@ export default function Layout({ title, children }) {
 
                 {/* FOOTER */}
                 {page && (
-                    <footer className="flex h-12 justify-center items-center">
+                    <footer className="flex justify-center items-center">
                         <Footer />
                     </footer>
                 )}

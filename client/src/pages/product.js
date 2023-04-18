@@ -33,11 +33,11 @@ export default function Product() {
     return (
         <Layout title="Product Page">
             <div>
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
+                <div className="grid grid-cols-5 gap-4">
+                    <div className="col-span-2">
                         <ImageGallery items={images} />;
                     </div>
-                    <div>
+                    <div className="col-span-3">
                         <h1 className="text-5xl font-medium text-zinc-800">{product[0]?.name}</h1>
                         <h1>Rs: {regularPrice}</h1>
                         <h1>Rs: {salePrice}</h1>

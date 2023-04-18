@@ -11,11 +11,13 @@ import { toast } from 'react-toastify';
 export default function Register() {
     const [redirect, setRedirect] = useState(false);
     const [conditions, setConditions] = useState(false);
+    const [type, setType] = useState('');
 
     const router = useRouter();
 
     if (redirect) {
-        router.push('/login');
+        if (type == 'CUSTOMER') router.push('/');
+        if (type == 'SELLER') router.push('/dashboard/profile');
     }
 
     const schema = yup.object().shape({
@@ -48,32 +50,36 @@ export default function Register() {
 
         if (conditions) {
             Axios.post('http://localhost:3000/api/auth/register', validatedData)
-                .then((response) => {
-                    fetchResult(response);
+                .then((res) => {
+                    fetchResult(res);
                 })
-                .catch((error) => {
-                    fetchError(error);
+                .catch((err) => {
+                    fetchError(err);
                 });
         } else {
-            toast.error('accept terms and condition to continue');
+            toast.error('ACCEPT TERMS AND CONDITION TO CONTINUE');
         }
     };
 
-    const fetchResult = (response) => {
-        if (response.status == 200) {
-            toast.success('registered successfully');
-        }
+    const fetchResult = (res) => {
+        if (res.status == 200) {
+            toast.success('REGISTER SUCCESSFULLY');
 
-        setRedirect(true);
+            setTimeout(() => {
+                localStorage.setItem('access_token', JSON.stringify(res.data.data.token));
+                localStorage.setItem('user_data', JSON.stringify(res.data.data.otherDetails));
+
+                setType(res.data.data.otherDetails.role);
+                setRedirect(true);
+            }, 2000);
+        }
     };
 
-    const fetchError = (error) => {
-        const errorMessage = error.response.data.message;
-        {
-            errorMessage && toast.error(errorMessage);
-        }
+    const fetchError = (err) => {
+        const errorMessage = err.response.data.message;
+        if (errorMessage != null) toast.error(errorMessage);
 
-        toast.error('connection error try again');
+        toast.error('CONNECTION ERROR TRY AGAIN');
     };
 
     return (

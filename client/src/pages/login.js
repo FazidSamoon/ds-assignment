@@ -7,14 +7,16 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { toast } from 'react-toastify';
-import Cookies from 'js-cookie';
 
 export default function Login() {
     const [redirect, setRedirect] = useState(false);
+    const [type, setType] = useState('');
+
     const router = useRouter();
 
     if (redirect) {
-        router.push('/');
+        if (type == 'CUSTOMER') router.push('/');
+        if (type == 'SELLER') router.push('/dashboard/profile');
     }
 
     const schema = yup.object().shape({
@@ -41,19 +43,24 @@ export default function Login() {
     };
 
     const fetchResult = (response) => {
-        toast.success(response.data.message);
+        if (response.status == 200) {
+            toast.success('LOGIN SUCCESSFULLY');
 
-        Cookies.set('access_token', response.data.data.token);
-        setRedirect(true);
+            setTimeout(() => {
+                localStorage.setItem('access_token', JSON.stringify(response.data.data.token));
+                localStorage.setItem('user_data', JSON.stringify(response.data.data.otherDetails));
+
+                setType(response.data.data.otherDetails.role);
+                setRedirect(true);
+            }, 2000);
+        }
     };
 
     const fetchError = (error) => {
         const errorMessage = error.response.data.message;
-        {
-            errorMessage && toast.error(errorMessage);
-        }
+        if (errorMessage != null) toast.error(errorMessage);
 
-        toast.error('connection error try again');
+        toast.error('CONNECTION ERROR TRY AGAIN');
     };
 
     return (
