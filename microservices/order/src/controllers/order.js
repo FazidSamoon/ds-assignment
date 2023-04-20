@@ -1,5 +1,6 @@
 import asyncHandler from '../middlewares/async';
 import { createOrderService, deleteOrdedrService, getAllOrdersService, getOrderByIdService, updateOrderService } from '../services/orderSevices';
+import axios from 'axios';
 
 import { makeResponse } from '../utils/response';
 
@@ -11,9 +12,26 @@ export const getAllOrders = async (req, res) => {
 };
 
 export const createOrder = async (req, res) => {
+    const user = req.user;
     const response = await createOrderService(req.body);
     if (!response) {
         return makeResponse({ res, status: 400, message: 'Order not created' });
+    }
+    if (response) {
+        axios.post('http://ticketing.dev/api/email/send', {
+            email: user.email,
+            subject: 'Order created successfully',
+            body: ` Your order has been created successfully.<br>
+                    <b>Order ID:</b> ${response._id}<br>
+                    <b>Order Date:</b> ${response.createdAt}<br>
+                    <b>Order Total:</b> ${response.amount}<br>
+                    <b>Order Status:</b> ${response.status}<br>
+                    <b>Order Items:</b> ${response.products.map((item) => item.name)}<br>
+            
+                    <br>
+                    <br>
+                    <b>Thank you for shopping with us.</b>`
+        });
     }
     return makeResponse({ res, status: 200, data: response, message: 'order created' });
 };

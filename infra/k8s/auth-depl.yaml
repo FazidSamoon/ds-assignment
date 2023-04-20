@@ -36,10 +36,6 @@ spec:
               secretKeyRef:
                 name: jwt-expiration-time
                 key: JWT_EXPIRATION_TIME
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
 ---
 apiVersion: v1
 kind: Service

@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-depl
+  name: payments-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: order
+      app: payments
   template:
     metadata:
       labels:
-        app: order
+        app: payments
     spec:
       containers:
-      - name: order
-        image: fazidsamoon/ds-order
+      - name: payments
+        image: fazidsamoon/ds-payments
         env:
           - name: MONGO_URI
             valueFrom:
@@ -26,16 +26,20 @@ spec:
               secretKeyRef:
                 name: jwt-secret-key
                 key: JWT_SECRET_KEY
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: order-srv
+  name: payments-srv
 spec:
   selector:
-    app: order
+    app: payments
   ports:
-    - name: order
+    - name: payments
       protocol: TCP
-      port: 3002
-      targetPort: 3002
+      port: 3005
+      targetPort: 3005

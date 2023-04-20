@@ -1,10 +1,10 @@
 import { Product } from 'ds-assignment-database-schema-package';
 
 export const getAllProductsService = async (queries) => {
-    const { seller, category, sort, page, limit } = queries;
+    const { seller, category, sort } = queries;
     let queryObject = {};
     if (seller) {
-        queryObject.seller = { $regex: seller, $options: 'i' };
+        queryObject.seller = seller;
     }
     if (category) {
         queryObject.category = category;
@@ -18,10 +18,6 @@ export const getAllProductsService = async (queries) => {
         response = response.sort('-createdAt');
     }
 
-    const pages = Number(page) || 1;
-    const limits = Number(limit) || 10;
-    const skips = (pages - 1) * limits;
-    response = response.skip(skips).limit(limits);
     return response;
 };
 
