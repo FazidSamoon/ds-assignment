@@ -44,7 +44,8 @@ export default function Login() {
 
     const fetchResult = (response) => {
         if (response.status == 200) {
-            toast.success('LOGIN SUCCESSFULLY');
+            toast.success('login successfully');
+            console.log(response);
 
             setTimeout(() => {
                 localStorage.setItem('access_token', JSON.stringify(response.data.data.token));
@@ -60,7 +61,7 @@ export default function Login() {
         const errorMessage = error.response.data.message;
         if (errorMessage != null) toast.error(errorMessage);
 
-        toast.error('CONNECTION ERROR TRY AGAIN');
+        toast.error('connection error try again');
     };
 
     return (

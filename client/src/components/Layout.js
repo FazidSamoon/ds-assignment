@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import jwtDecode from 'jwt-decode';
-import { CartSolid, ProfileSolid, SearchOutline } from '@/utils/iconData';
+import { CartSolid, ProfileSolid } from '@/utils/iconData';
 import { Menu } from '@headlessui/react';
 
 export default function Layout({ title, children }) {
@@ -15,12 +15,15 @@ export default function Layout({ title, children }) {
 
     const router = useRouter();
     const { pathname } = router;
+    const [userRole, setUserRole] = useState();
 
     const [page, setPage] = useState(true);
     const [isLogin, setIsLogin] = useState(false);
 
     useEffect(() => {
         const accessToken = JSON.parse(localStorage.getItem('access_token'));
+        const userData = JSON.parse(localStorage.getItem('user_data'));
+        setUserRole(userData?.role);
         if (accessToken != null) {
             const decodedToken = jwtDecode(accessToken);
             if (decodedToken.exp * 1000 < new Date().getTime()) localStorage.removeItem('access_token');
@@ -37,6 +40,7 @@ export default function Layout({ title, children }) {
     const onIconClick = (res) => {
         if (isLogin) {
             if (res == 'c') router.push('/cart');
+            if (res == 'p' && userRole == 'SELLER') router.push('/dashboard/profile');
         } else {
             if (res == 'c' || res == 'p') router.push('/login');
         }
@@ -64,13 +68,13 @@ export default function Layout({ title, children }) {
                 {/* HEADER */}
                 {page && (
                     <header className="bg-zinc-100 py-4">
-                        <nav className="flex h-12 items-center px-4 justify-between">
+                        <nav className="flex h-14 items-center mx-10 justify-between">
                             <Link href="/">
-                                <p className="text-lg font-bold">VP STORES</p>
+                                <p className="text-xl text-zinc-900 font-bold">VP STORES</p>
                             </Link>
 
                             <div className="flex">
-                                <div className="flex items-center">
+                                <div className="flex items-center text-lg font-medium text-zinc-900">
                                     <Link href="/" className={pathname === '/' ? activeLink : inactiveLink}>
                                         <p className="mx-2 py-1.5">Home</p>
                                     </Link>
@@ -83,11 +87,6 @@ export default function Layout({ title, children }) {
                                     <Link href="/contact" className={pathname.includes('/contact') ? activeLink : inactiveLink}>
                                         <p className="mx-2 py-1.5">Contact</p>
                                     </Link>
-                                </div>
-
-                                <div className="flex bg-white items-center rounded m-2 ml-3 p-1">
-                                    <input type="text" placeholder="Search product" className="border-none outline-none focus:ring-0 pl-4" />
-                                    <SearchOutline />
                                 </div>
                             </div>
 
@@ -115,18 +114,20 @@ export default function Layout({ title, children }) {
                                                         <ProfileSolid />
                                                     </Menu.Button>
                                                 </div>
-                                                <Menu.Items className="absolute flex flex-col -right-3 top-10 gap-y-2 bg-zinc-100 border-2 border-zinc-800 text-zinc-800 rounded-lg">
-                                                    <Menu.Item className="px-8 py-2 border-b-2 border-zinc-800">
-                                                        <Link href={'/profile'}>
-                                                            <h1 className="font-medium">PROFILE</h1>
-                                                        </Link>
-                                                    </Menu.Item>
-                                                    <Menu.Item className="px-6 pb-2">
-                                                        <a className="font-medium text-center" onClick={LogoutHandle}>
-                                                            LOGOUT
-                                                        </a>
-                                                    </Menu.Item>
-                                                </Menu.Items>
+                                                {userRole != 'SELLER' && (
+                                                    <Menu.Items className="absolute flex flex-col -right-3 top-10 gap-y-2 bg-zinc-100 border-2 border-zinc-800 text-zinc-800 rounded-lg">
+                                                        <Menu.Item className="px-8 py-2 border-b-2 border-zinc-800">
+                                                            <Link href={'/profile'}>
+                                                                <h1 className="font-medium">PROFILE</h1>
+                                                            </Link>
+                                                        </Menu.Item>
+                                                        <Menu.Item className="px-6 pb-2">
+                                                            <a className="font-medium text-center" onClick={LogoutHandle}>
+                                                                LOGOUT
+                                                            </a>
+                                                        </Menu.Item>
+                                                    </Menu.Items>
+                                                )}
                                             </Menu>
                                         </p>
                                     </div>

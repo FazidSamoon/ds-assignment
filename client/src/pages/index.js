@@ -1,19 +1,39 @@
 /* eslint-disable @next/next/no-img-element */
 import Layout from '@/components/Layout';
 import ProductCard from '@/components/ProductCard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SwiperCore, { Navigation, Pagination, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.min.css';
 import data from '../utils/productData';
+import { fetchError } from '@/components/Common';
+import Axios from 'axios';
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
 export default function Home() {
     const [email, setEmail] = useState('');
+    const [allProduct, setAllProduct] = useState([]);
+    const [ethnicProduct, setEthnicProduct] = useState([]);
+    const [veganProduct, setVeganProduct] = useState([]);
+    const [gourmetProduct, setGourmetProduct] = useState([]);
 
-    const subscribeHandle = () => {
-        return email;
+    useEffect(() => {
+        Axios.get('http://localhost:3001/api/product/')
+            .then((response) => {
+                setAllProduct(response.data.data);
+
+                setEthnicProduct(allProduct.filter((product) => product.category === 'Ethnic').slice(0, 10));
+                setVeganProduct(allProduct.filter((product) => product.category === 'Vegan').slice(0, 10));
+                setGourmetProduct(allProduct.filter((product) => product.category === 'Gourmet').slice(0, 10));
+            })
+            .catch((error) => {
+                fetchError(error);
+            });
+    }, [allProduct]);
+
+    const subscribeHandle = (event) => {
+        setEmail(event.target.value);
     };
 
     return (
@@ -38,7 +58,7 @@ export default function Home() {
                 </div>
 
                 <Swiper slidesPerView={3} spaceBetween={60}>
-                    {data.products.map((product) => (
+                    {ethnicProduct.map((product) => (
                         <SwiperSlide key={product.id}>
                             <ProductCard product={product} />
                         </SwiperSlide>
@@ -54,7 +74,7 @@ export default function Home() {
                 </div>
 
                 <Swiper slidesPerView={3} spaceBetween={60}>
-                    {data.products.map((product) => (
+                    {veganProduct.map((product) => (
                         <SwiperSlide key={product.id}>
                             <ProductCard product={product} />
                         </SwiperSlide>
@@ -70,7 +90,7 @@ export default function Home() {
                 </div>
 
                 <Swiper slidesPerView={3} spaceBetween={60}>
-                    {data.products.map((product) => (
+                    {gourmetProduct.map((product) => (
                         <SwiperSlide key={product.id}>
                             <ProductCard product={product} />
                         </SwiperSlide>

@@ -76,7 +76,7 @@ export default function Profile() {
             localStorage.removeItem('access_token');
             localStorage.removeItem('user_data');
 
-            //Delet Axios
+            //Delete Axios
 
             router.push('/register');
         }

@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { toast } from 'react-toastify';
+import { fetchError } from '@/components/Common';
 
 export default function Register() {
     const [redirect, setRedirect] = useState(false);
@@ -57,13 +58,13 @@ export default function Register() {
                     fetchError(err);
                 });
         } else {
-            toast.error('ACCEPT TERMS AND CONDITION TO CONTINUE');
+            toast.error('accept terms and condition to continue');
         }
     };
 
     const fetchResult = (res) => {
         if (res.status == 200) {
-            toast.success('REGISTER SUCCESSFULLY');
+            toast.success('register successfully');
 
             setTimeout(() => {
                 localStorage.setItem('access_token', JSON.stringify(res.data.data.token));
@@ -73,13 +74,6 @@ export default function Register() {
                 setRedirect(true);
             }, 2000);
         }
-    };
-
-    const fetchError = (err) => {
-        const errorMessage = err.response.data.message;
-        if (errorMessage != null) toast.error(errorMessage);
-
-        toast.error('CONNECTION ERROR TRY AGAIN');
     };
 
     return (

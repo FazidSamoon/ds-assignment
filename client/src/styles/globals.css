@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import '~react-image-gallery/styles/css/image-gallery.css';
 
 :root {
     --foreground-rgb: 0, 0, 0;
@@ -49,7 +50,7 @@ body {
 }
 
 .dashboard-head {
-    @apply bg-zinc-800 text-white cursor-pointer rounded-lg p-4 mb-4;
+    @apply bg-zinc-800 text-white cursor-pointer rounded-lg px-5 py-4 mb-4;
 }
 
 .dashboard-head-config {
@@ -59,5 +60,3 @@ body {
 :root {
     --swiper-theme-color: #ffffff !important;
 }
-
-@import '~react-image-gallery/styles/css/image-gallery.css';
