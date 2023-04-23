@@ -4,7 +4,6 @@ import { sendMail } from '../services/email';
 const emailRouter = Express.Router();
 
 emailRouter.post('/send', (req, res) => {
-    console.log("hey");
     const { email, subject, body } = req.body;
     sendMail(email, body, subject)
         .then(() => {

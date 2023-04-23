@@ -17,8 +17,22 @@ export const createOrder = async (req, res) => {
     if (!response) {
         return makeResponse({ res, status: 400, message: 'Order not created' });
     }
+    console.log(response)
     if (response) {
-        axios.post('http://email-srv:3009/api/email/send', {
+        Object.values(response.products).forEach((item) => {
+            Promise.all([
+                axios.patch(`http://localhost:3001/api/product/quantity/${item.productID}`, {
+                    quantity: item.quantity,
+                }).then((res) => {
+                    console.log(res.data);
+                }).catch((err) => {
+                    console.log(err);
+                }),
+            ]).catch((err) => {
+                throw new Error(err);
+            });
+        })
+        axios.post('http://localhost:3009/api/email/send', {
             email: user.email,
             subject: 'Order created successfully',
             body: ` Your order has been created successfully.<br>

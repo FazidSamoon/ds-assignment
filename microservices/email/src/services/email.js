@@ -1,33 +1,16 @@
 import { MAIL_CREDENTIALS } from '../utils/config';
 import nodemailer from 'nodemailer';
-import Mailgen from 'mailgen';
 
 const transport = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
     auth: {
-        user: MAIL_CREDENTIALS.USER,
-        pass: MAIL_CREDENTIALS.PASS
-    }
-});
-
-let mailGenerator = new Mailgen({
-    theme: 'default',
-    product: {
-        name: 'Mailgen',
-        link: 'https://mailgen.js/'
+        user: 'vpstore451@gmail.com',
+        pass: 'enngdaqsxncrlnuk'
     }
 });
 
 export const sendMail = async (email, body, subject) => {
-    let response = {
-        body: {
-            name: 'Mailgen',
-            intro: 'Welcome to Best buy! We’re very excited to have you on board.',
-            table: body
-        }
-    };
-
     // let mail = mailGenerator.generate(response);
     const mailOptions = {
         from: MAIL_CREDENTIALS.USER,

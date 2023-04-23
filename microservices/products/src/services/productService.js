@@ -45,6 +45,23 @@ export const updateProductService = async (id, body) => {
     }
 };
 
+export const updateProductQuantityService = async (id, quantity) => {
+    console.log(id, quantity);
+    console.log(quantity)
+    try {
+        const response = await Product.findByIdAndUpdate(
+            id,
+            {
+                $inc: { inStock: -quantity.quantity }
+            },
+            { new: true }
+        );
+        return response;
+    } catch (error) {
+        return { status: 400, message: error.message };
+    }
+};
+
 export const deleteProductService = async (id) => {
     try {
         const response = await Product.findByIdAndDelete(id);
