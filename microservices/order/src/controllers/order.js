@@ -18,7 +18,7 @@ export const createOrder = async (req, res) => {
         return makeResponse({ res, status: 400, message: 'Order not created' });
     }
     if (response) {
-        axios.post('http://ticketing.dev/api/email/send', {
+        axios.post('http://email-srv:3009/api/email/send', {
             email: user.email,
             subject: 'Order created successfully',
             body: ` Your order has been created successfully.<br>
@@ -40,6 +40,22 @@ export const updateOrder = async (req, res) => {
     const { id } = req.params;
     const response = await updateOrderService(id, req.body);
     if (!response) return makeResponse({ res, status: 400, message: 'Order not updated' });
+    if (response) {
+        axios.post('http://email-srv:3009/api/email/send', {
+            email: user.email,
+            subject: 'Order created successfully',
+            body: ` Your order has been created successfully.<br>
+                    <b>Order ID:</b> ${response._id}<br>
+                    <b>Order Date:</b> ${response.createdAt}<br>
+                    <b>Order Total:</b> ${response.amount}<br>
+                    <b>Order Status:</b> ${response.status}<br>
+                    <b>Order Items:</b> ${response.products.map((item) => item.name)}<br>
+            
+                    <br>
+                    <br>
+                    <b>Thank you for shopping with us.</b>`
+        });
+    }
     return makeResponse({ res, status: 200, data: response, message: 'Order updated' });
 };
 

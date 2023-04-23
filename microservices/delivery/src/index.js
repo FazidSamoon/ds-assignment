@@ -33,7 +33,7 @@ app.use((err, req, res, next) => {
 
 const start = async () => {
     await connectDB();
-    app.listen(3002, () => {
+    app.listen(3003, () => {
         console.log('Delivery service listening on port 3003');
     });
 }

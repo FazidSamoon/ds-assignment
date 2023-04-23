@@ -10,7 +10,7 @@ spec:
     - host: ticketing.dev
       http:
         paths:
-          - path: /auth/?(.*)
+          - path: /api/auth/?(.*)
             pathType: Prefix
             backend:
               service:
@@ -51,7 +51,7 @@ spec:
               service:
                 name: payments-srv
                 port:
-                  number: 3009
+                  number: 3005
           - path: /api/email/?(/?)
             pathType: Prefix
             backend:

@@ -14,20 +14,22 @@ export const createProduct = async (req, res) => {
     if (response.status) return makeResponse({ res, ...response });
     if (!response) return makeResponse({ res, status: 400, message: 'Product not created' });
     if (response) {
-        axios.post('http://ticketing.dev/api/email/send', {
+        axios.post('http://email-srv:3009/api/email/send', {
             email: req.user.email,
             subject: 'Product created successfully',
             body: ` Your product has been created successfully.<br>
                     <b>Product ID:</b> ${response._id}<br>
                     <b>Product Name:</b> ${response.name}<br>
                     <b>Product Price:</b> ${response.price}<br>
-                    <b>Product Quantity:</b> ${response.quantity}<br>
+                    <b>Product Quantity:</b> ${response.inStock}<br>
                     <b>Product Description:</b> ${response.description}<br>
                     <b>Product Category:</b> ${response.category}<br>
 
                     <br>
                     <br>
                     <b>Thank you for shopping with us.</b>`
+        }).catch((err) => {
+            console.log(err);
         });
     }
     return makeResponse({ res, status: 200, data: response, message: 'Product created' });
@@ -39,14 +41,14 @@ export const updateProduct = async (req, res) => {
     if (response.status) return makeResponse({ res, ...response });
     if (!response) return makeResponse({ res, status: 400, message: 'Product not updated' });
     if (response) {
-        axios.post('http://ticketing.dev/api/email/send', {
+        axios.post('http://email-srv:3009/api/email/send', {
             email: req.user.email,
             subject: 'Product updated successfully',
             body: ` Your product has been updated successfully.<br>
                     <b>Product ID:</b> ${response._id}<br>
                     <b>Product Name:</b> ${response.name}<br>
                     <b>Product Price:</b> ${response.price}<br>
-                    <b>Product Quantity:</b> ${response.quantity}<br>
+                    <b>Product Quantity:</b> ${response.inStock}<br>
                     <b>Product Description:</b> ${response.description}<br>
                     <b>Product Category:</b> ${response.category}<br>
 
@@ -65,7 +67,7 @@ export const deleteProduct = async (req, res) => {
     if (!response) return makeResponse({ res, status: 400, message: 'Product not deleted' });
 
     if (response) {
-        axios.post('http://ticketing.dev/api/email/send', {
+        axios.post('http://email-srv:3009/api/email/send', {
             email: req.user.email,
             subject: 'Product deleted successfully',
             body: ` Your product has been deleted successfully.<br>
