@@ -45,6 +45,13 @@ spec:
                 name: rating-srv
                 port:
                   number: 3004
+          - path: /api/payments/?(/?)
+            pathType: Prefix
+            backend:
+              service:
+                name: payments-srv
+                port:
+                  number: 3005
           - path: /api/email/?(/?)
             pathType: Prefix
             backend:

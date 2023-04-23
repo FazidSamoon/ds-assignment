@@ -1,7 +1,7 @@
 import { Product } from 'ds-assignment-database-schema-package';
 
 export const getAllProductsService = async (queries) => {
-    const { seller, category, sort, page, limit } = queries;
+    const { seller, category, sort } = queries;
     let queryObject = {};
     if (seller) {
         queryObject.seller = { $regex: seller, $options: 'i' };
@@ -40,6 +40,23 @@ export const updateProductService = async (id, body) => {
             id,
             {
                 $set: body
+            },
+            { new: true }
+        );
+        return response;
+    } catch (error) {
+        return { status: 400, message: error.message };
+    }
+};
+
+export const updateProductQuantityService = async (id, quantity) => {
+    console.log(id, quantity);
+    console.log(quantity)
+    try {
+        const response = await Product.findByIdAndUpdate(
+            id,
+            {
+                $inc: { inStock: -quantity.quantity }
             },
             { new: true }
         );

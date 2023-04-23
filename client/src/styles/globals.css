@@ -100,8 +100,41 @@ a {
   text-decoration: none;
 }
 
+<<<<<<< Updated upstream
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
+=======
+.btn-primary {
+    @apply bg-zinc-800 text-white rounded-lg p-2;
+}
+
+.btn-subscribe {
+    @apply bg-zinc-800 text-white rounded-lg p-4 ml-4;
+}
+
+.card-title {
+    @apply text-4xl font-medium text-zinc-800;
+}
+
+.card-button {
+    @apply bg-zinc-800 text-white rounded-lg px-6;
+}
+
+.footer-head {
+    @apply text-2xl text-zinc-800 font-medium;
+}
+
+.dashboard-head {
+    @apply bg-zinc-800 text-white cursor-pointer rounded-lg px-5 py-4 mb-4;
+}
+
+.dashboard-head-config {
+    width: 15.5%;
+}
+
+:root {
+    --swiper-theme-color: #ffffff !important;
+>>>>>>> Stashed changes
 }
