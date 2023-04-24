@@ -2,11 +2,14 @@ import { OrderModel } from 'ds-assignment-database-schema-package';
 
 export const getAllOrdersService = async (queries) => {
     try {
-        const { sellerID, category, sort, page, limit } = queries;
+        const { sellerID, category, sort, page, limit, userID } = queries;
         
         let queryObject = {};
         if (sellerID) {
             queryObject.sellerID = sellerID;
+        }
+        if (userID) {
+            queryObject.userID = userID;
         }
         if (category) {
             queryObject.category = category;
@@ -20,11 +23,13 @@ export const getAllOrdersService = async (queries) => {
             response = response.sort('-createdAt');
         }
 
-        const pages = Number(page) || 1;
-        const limits = Number(limit) || 10;
-        const skips = (pages - 1) * limits;
-        response = response.skip(skips).limit(limits);
-        return response;
+        return response.populate({
+            path: 'products',
+            populate: {
+                path: 'productID',
+                model: 'Product'
+            }
+        })
     } catch (error) {
         return { status: 400, message: error.message };
     }

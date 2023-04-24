@@ -88,3 +88,11 @@ export const getOrder = async (req, res) => {
     if (!response) return makeResponse({ res, status: 400, message: 'Order not found' });
     return makeResponse({ res, status: 200, data: response, message: 'Order found' });
 };
+
+export const getAllOrdersForSeller = async (req, res) => {
+    const { id } = req.params;
+    const response = await getAllOrdersService(req.query);
+    if (response.status) return makeResponse({ res, ...response });
+    if (!response) return makeResponse({ res, status: 400, message: 'No order found' });
+    return makeResponse({ res, status: 200, data: response, message: 'Orders found' });
+};
