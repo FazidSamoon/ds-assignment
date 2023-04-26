@@ -35,14 +35,15 @@ export default function Payment() {
             let orderObject = [
                 {
                     userID: userData._id,
-                    sellerID: [],
+                    // sellerID: [],
+                    // sellerID: cartData[0].sellerID,
                     products: [],
                     amount: total,
                     address: shippingData
                 }
             ];
             for (let i = 0; i < cartData.length; i++) {
-                orderObject[0].sellerID.push({ sellerID: cartData[i].sellerID });
+                // orderObject[0].sellerID.push({ sellerID: cartData[i].sellerID });
                 orderObject[0].products.push({
                     productID: cartData[i]._id,
                     quantity: cartData[i].quantity
@@ -53,9 +54,8 @@ export default function Payment() {
     }, [cartData, isHave, shippingData, userData]);
 
     const doPay = () => {
-        console.log(orderData);
-        createOrder(orderData, accessToken);
-        // localStorage.removeItem('cart_data');
+        createOrder(orderData[0], accessToken);
+        localStorage.removeItem('cart_data');
     };
 
     return (

@@ -33,6 +33,7 @@ export default function ProductCard(props) {
 
     //     return stars;
     // }
+    console.log(props);
 
     return (
         <>
@@ -52,7 +53,7 @@ export default function ProductCard(props) {
                             <h1 className="text-sm mt-0.5">
                                 <s>LKR: {props.product.price}</s>
                             </h1>
-                            <h1 className="ml-2 text-lg text-green-600 font-medium">LKR: {props.product.price}</h1>
+                            <h1 className="ml-2 text-lg text-green-600 font-medium">LKR: {props.product.price - (props.product.price * props.product.discount) / 100}</h1>
                         </div>
                         <div className="flex text-yellow-500">{/* <RatingStars /> */}</div>
                     </div>

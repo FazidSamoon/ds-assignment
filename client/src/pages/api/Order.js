@@ -1,4 +1,4 @@
-import { fetchError, fetchResultNormal } from '@/components/Common';
+import { fetchError, fetchResult, fetchResultNormal } from '@/components/Common';
 import Axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:3002/api/order';
@@ -20,4 +20,14 @@ export const getOrderById = async (userId) => {
     } catch (error) {
         console.log(error);
     }
+};
+
+export const UpdateOrder = async (orderId, orderData, accessToken) => {
+    Axios.patch(`${API_BASE_URL}/${orderId}`, orderData, { headers: { Authorization: `Bearer ${accessToken}` } })
+        .then((response) => {
+            fetchResult(response, 'status updated successfully');
+        })
+        .catch((error) => {
+            fetchError(error);
+        });
 };
