@@ -4,7 +4,7 @@ export const getAllProductsService = async (queries) => {
     const { seller, category, sort, page, limit } = queries;
     let queryObject = {};
     if (seller) {
-        queryObject.seller = { $regex: seller, $options: 'i' };
+        queryObject.seller = seller;
     }
     if (category) {
         queryObject.category = category;
@@ -19,7 +19,7 @@ export const getAllProductsService = async (queries) => {
     }
 
     const pages = Number(page) || 1;
-    const limits = Number(limit) || 10;
+    const limits = Number(limit) || 20;
     const skips = (pages - 1) * limits;
     response = response.skip(skips).limit(limits);
     return response;
