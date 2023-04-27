@@ -17,7 +17,6 @@ export const createOrder = async (req, res) => {
     if (!response) {
         return makeResponse({ res, status: 400, message: 'Order not created' });
     }
-    console.log(response)
     if (response) {
         Object.values(response.products).forEach((item) => {
             Promise.all([

@@ -2,6 +2,7 @@ import { Product } from 'ds-assignment-database-schema-package';
 
 export const getAllProductsService = async (queries) => {
     const { seller, category, sort } = queries;
+    console.log(queries)
     let queryObject = {};
     if (seller) {
         queryObject.seller = seller;
@@ -77,3 +78,4 @@ export const getProductByIdService = async (id) => {
         return { status: 400, message: error.message };
     }
 };
+ 
